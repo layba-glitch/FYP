@@ -1,6 +1,6 @@
 "use client";
 import { useMemo, useState } from "react";
-import { AlertTriangle, CheckCircle2, Loader2, Search, ShieldAlert, Cpu, Activity } from "lucide-react";
+import { AlertTriangle, CheckCircle2, Loader2, Search, ShieldAlert, Cpu, Activity, Sliders } from "lucide-react";
 import clsx from "clsx";
 import styles from './page.module.css';
 import { analyzeJob } from "@/lib/api";
@@ -16,26 +16,31 @@ export default function AnalyzePage() {
   const [jobTitle, setJobTitle] = useState("");
   const [jobText, setJobText] = useState("");
   const [location, setLocation] = useState("");
+  const [threshold, setThreshold] = useState<number | null>(null); // Null forces explicit selection
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<PredictResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const canAnalyze = useMemo(() => jobText.trim().length > 20, [jobText]);
+  // Button unlocks only if text length > 20 AND a sensitivity threshold is actively chosen
+  const canAnalyze = useMemo(() => jobText.trim().length > 20 && threshold !== null, [jobText, threshold]);
 
   async function onAnalyze() {
-    // 1. Clear previous state immediately to trigger the "Scanning" UI
+    if (threshold === null) return;
+
     setResult(null);
     setError(null);
     setLoading(true);
 
     try {
-      // 2. Start the API call
-      const data = await analyzeJob({ title: jobTitle, description: jobText, location: location });
+      // Passes the strict threshold variable inside the payload structure
+      const data = await analyzeJob({ 
+        title: jobTitle, 
+        description: jobText, 
+        location: location,
+        threshold: threshold 
+      });
       
-      // 3. Artificial "Perception Delay" (800ms)
-      // This ensures the futuristic scanner animation is seen by the user
       await new Promise(resolve => setTimeout(resolve, 800)); 
-      
       setResult(data);
     } catch (e: any) {
       setError(e.message || "Neural connection failed.");
@@ -78,6 +83,35 @@ export default function AnalyzePage() {
                 onChange={(e) => setLocation(e.target.value)} 
               />
             </div>
+
+            {/* NEW SENSITIVITY SLIDER PORTAL */}
+            <div className={styles.fieldWrapper}>
+              <label className={styles.inputLabel}>
+                Scanner Sensitivity <span style={{ color: '#ef4444' }}>*</span>
+              </label>
+              <div className={styles.sliderContainer}>
+                <input
+                  type="range"
+                  min="1"
+                  max="3"
+                  step="1"
+                  value={threshold === 0.75 ? 1 : threshold === 0.50 ? 2 : threshold === 0.35 ? 3 : ""}
+                  onChange={(e) => {
+                    const step = parseInt(e.target.value);
+                    if (step === 1) setThreshold(0.75); // Low Sensitivity
+                    if (step === 2) setThreshold(0.50); // Normal Sensitivity
+                    if (step === 3) setThreshold(0.35); // High Sensitivity
+                  }}
+                  className={styles.rangeSlider}
+                />
+                <div className={styles.sliderLabels}>
+                  <span className={clsx(styles.labelStep, threshold === 0.75 && styles.labelActive)}>LOW (0.75)</span>
+                  <span className={clsx(styles.labelStep, threshold === 0.50 && styles.labelActive)}>NORMAL (0.50)</span>
+                  <span className={clsx(styles.labelStep, threshold === 0.35 && styles.labelActive)}>HIGH (0.35)</span>
+                </div>
+              </div>
+            </div>
+
             <div className={styles.fieldWrapper}>
               <label className={styles.inputLabel}>Linguistic Payload (Description)</label>
               <textarea 
@@ -85,7 +119,7 @@ export default function AnalyzePage() {
                 value={jobText} 
                 onChange={(e) => setJobText(e.target.value)} 
                 placeholder="Paste the full job description here for pattern recognition..." 
-                rows={8} 
+                rows={6} 
               />
             </div>
 
@@ -95,7 +129,11 @@ export default function AnalyzePage() {
               className={clsx(styles.button, canAnalyze && !loading ? styles.activeButton : styles.disabledButton)}
             >
               {loading ? <Loader2 className="animate-spin" size={18} /> : <Activity size={18} />}
-              {loading ? "PROCESSING SIGNALS..." : "INITIALIZE SCAN"}
+              {loading 
+                ? "PROCESSING SIGNALS..." 
+                : threshold === null 
+                ? "SELECT SENSITIVITY LEVEL" 
+                : "INITIALIZE SCAN"}
             </button>
           </div>
         </div>

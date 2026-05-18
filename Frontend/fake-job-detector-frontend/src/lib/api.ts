@@ -2,6 +2,7 @@ export async function analyzeJob(data: {
   title: string;
   description: string;
   location: string;
+  threshold: number; // Added tracking parameter type
 }) {
   const res = await fetch("http://127.0.0.1:8000/predict", {
     method: "POST",
@@ -12,10 +13,8 @@ export async function analyzeJob(data: {
       title: data.title,
       location: data.location,
       description: data.description,
-      // Adding common fields your Pydantic model might require
-      company_profile: "", 
+      threshold: data.threshold, // Passes the chosen slider parameter
       requirements: "",
-      benefits: ""
     }),
   });
 
