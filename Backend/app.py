@@ -91,6 +91,7 @@ class PredictRequest(BaseModel):
     requirements: Optional[str] = Field(default="")
     country: Optional[str] = Field(default=None)
     location: Optional[str] = Field(default=None)
+    threshold: Optional[float] = Field(default=0.35)  # Dynamic threshold configuration
 
 class PredictResponse(BaseModel):
     final_label: str
@@ -139,11 +140,9 @@ def predict(req: PredictRequest):
     combined_prob = (ml_prob * w_ml) + (dl_prob * w_dl)
 
     # 3. HEURISTIC OVERRIDE (The "Mysterious Job" Fix)
-    # If key details are missing, we increase the "Fake" probability
     penalty = 0.0
     full_text = f"{req.description} {req.requirements}".lower()
     
-    # Check for missing contact or structural info
     missing_contact = not any(word in full_text for word in ["contact", "email", "@", "call", "phone", "apply via", "website"])
     is_vague = any(word in full_text for word in ["urgent", "immediately", "asap"]) and len(req.description) < 300
     
@@ -154,8 +153,10 @@ def predict(req: PredictRequest):
         
     combined_prob = min(1.0, combined_prob + penalty)
 
-    # 4. Final Classification
-    is_fake = combined_prob >= 0.35 # Slightly higher threshold with penalty
+    # 4. Final Classification (Dynamically Tuned)
+    current_threshold = req.threshold if req.threshold is not None else 0.35
+    
+    is_fake = combined_prob >= current_threshold
     label = "FAKE" if is_fake else "REAL"
     confidence = combined_prob if is_fake else (1 - combined_prob)
 
@@ -168,7 +169,7 @@ def predict(req: PredictRequest):
             "country": country, 
             "ensemble": "Weighted Average + Heuristic Penalty",
             "penalty_applied": penalty > 0,
-            "threshold": 0.35
+            "threshold": current_threshold
         }
     )
 
