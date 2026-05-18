@@ -91,7 +91,7 @@ class PredictRequest(BaseModel):
     requirements: Optional[str] = Field(default="")
     country: Optional[str] = Field(default=None)
     location: Optional[str] = Field(default=None)
-    threshold: Optional[float] = Field(default=0.35)  # Dynamic threshold configuration
+    threshold: float  # Strictly required field (No default fallback value)
 
 class PredictResponse(BaseModel):
     final_label: str
@@ -153,10 +153,8 @@ def predict(req: PredictRequest):
         
     combined_prob = min(1.0, combined_prob + penalty)
 
-    # 4. Final Classification (Dynamically Tuned)
-    current_threshold = req.threshold if req.threshold is not None else 0.35
-    
-    is_fake = combined_prob >= current_threshold
+    # 4. Final Classification (Dynamically Tuned via Request Payload)
+    is_fake = combined_prob >= req.threshold
     label = "FAKE" if is_fake else "REAL"
     confidence = combined_prob if is_fake else (1 - combined_prob)
 
@@ -169,7 +167,7 @@ def predict(req: PredictRequest):
             "country": country, 
             "ensemble": "Weighted Average + Heuristic Penalty",
             "penalty_applied": penalty > 0,
-            "threshold": current_threshold
+            "threshold": req.threshold
         }
     )
 
