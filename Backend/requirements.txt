@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+pydantic
+numpy
+joblib
+scikit-learn
+scipy
+tensorflow==2.19.0
+pymongo
+pandas

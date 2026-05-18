@@ -1,0 +1,250 @@
+/* --- Base Layout --- */
+.app-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: #050508;
+  color: #fff;
+}
+
+/* --- Futuristic Floating Header --- */
+.main-header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 100;
+  padding: 1.5rem 2rem;
+  display: flex;
+  justify-content: center;
+}
+
+.header-inner {
+  width: 100%;
+  max-width: 1200px;
+  background: rgba(10, 10, 15, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 20px;
+  padding: 0.75rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+/* --- Logo Styling (Pulse Scanner) --- */
+.logo-group {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.logo-icon {
+  position: relative;
+  width: 42px;
+  height: 42px;
+  background: #0a0a0f;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  border-radius: 10px;
+  border: 1.5px solid #6366f1;
+  box-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
+  overflow: hidden;
+}
+
+.logo-icon::before {
+  content: '';
+  position: absolute;
+  top: -100%;
+  left: 0;
+  width: 100%;
+  height: 60%;
+  background: linear-gradient(transparent, rgba(99, 102, 241, 0.4), transparent);
+  animation: logo-scan 2.5s infinite linear;
+  z-index: 1;
+}
+
+@keyframes logo-scan {
+  0% { top: -100%; }
+  100% { top: 100%; }
+}
+
+.logo-icon span {
+  z-index: 2;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+}
+
+.brand-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.brand-name {
+  font-weight: 700;
+  color: #fff;
+  font-size: 1rem;
+  letter-spacing: -0.5px;
+}
+
+.brand-tagline {
+  font-size: 0.7rem;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* --- Clean Nav --- */
+.nav-dock {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.dock-link {
+  position: relative;
+  padding: 0.5rem 0.25rem;
+  color: #64748b;
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  transition: all 0.3s ease;
+}
+
+.dock-link:hover {
+  color: #fff;
+  text-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
+}
+
+.dock-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0%;
+  height: 2px;
+  background: #6366f1;
+  box-shadow: 0 0 10px #6366f1;
+  transition: width 0.3s ease;
+}
+
+.dock-link:hover::after {
+  width: 100%;
+}
+
+/* --- Standard Page Content --- */
+.page-content {
+  flex: 1;
+  padding-top: 140px; /* Slight increase for better spacing */
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-bottom: 40px;
+}
+
+.main-footer {
+  padding: 4rem 2rem 2rem;
+  width: 100%;
+  background: #050508;
+}
+
+.footer-line {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.2), transparent);
+  margin-bottom: 2rem;
+}
+
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  opacity: 0.6;
+}
+
+.footer-text {
+  font-size: 0.8rem;
+  color: #94a3b8;
+}
+/* --- Global Background Control --- */
+.fixed-background-container {
+  position: fixed;
+  inset: 0;
+  z-index: -10; /* Put it far behind everything */
+  pointer-events: none; /* VERY IMPORTANT: Clicks go through this layer */
+  overflow: hidden;
+}
+
+.grid-overlay {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(100, 100, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(100, 100, 255, 0.05) 1px, transparent 1px);
+  background-size: 50px 50px;
+  mask-image: radial-gradient(circle at center, black, transparent 85%);
+  z-index: -1;
+}
+
+.glow-orb {
+  position: absolute;
+  top: 25%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 650px;
+  height: 650px;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.12) 0%, transparent 70%);
+  filter: blur(90px);
+  z-index: -2;
+}
+
+.floating-node {
+  position: absolute;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.07) 0%, transparent 70%);
+  border-radius: 50%;
+  z-index: -1;
+  animation: float-bg 12s infinite ease-in-out;
+}
+
+@keyframes float-bg {
+  0%, 100% { transform: translateY(0) translateX(0); }
+  50% { transform: translateY(-50px) translateX(20px); }
+}
+
+/* --- Layout Base --- */
+body {
+  background-color: #050508;
+  margin: 0;
+  overflow-x: hidden;
+}
+
+.app-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  position: relative;
+  z-index: 1; /* Keep content above the background */
+}
+
+.main-header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000; /* Ensure header is on the very top */
+  padding: 1.5rem 2rem;
+  display: flex;
+  justify-content: center;
+}
+
+/* --- Standard Page Content --- */
+.page-content {
+  flex: 1;
+  padding-top: 140px; 
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-bottom: 40px;
+  position: relative;
+}

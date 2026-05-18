@@ -1,0 +1,24 @@
+{
+  "name": "fake-job-detector-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "clsx": "^2.1.1",
+    "framer-motion": "^12.38.0",
+    "lucide-react": "^0.563.0",
+    "next": "^16.1.4",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "25.0.10",
+    "@types/react": "19.2.9",
+    "eslint": "8.6.0",
+    "eslint-config-next": "12.1.0"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  }
+}

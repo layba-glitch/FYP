@@ -1,0 +1,10 @@
+ **/node_modules/
+Backend/Models/dl/*.csv
+Backend/Models/dl/*.h5
+Backend/Models/dl/*.pt
+Backend/Models/dl/*.pkl
+Backend/venv/
+**/__pycache__/
+.env
+AI/
+Frontend/Relume Figma Kit (v3.7) (Community)/

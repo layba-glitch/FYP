@@ -1,0 +1,119 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;500&display=swap');
+html {
+  scroll-behavior: smooth;
+}
+
+/* Optional: Prevent horizontal scrollbar during glide */
+body {
+  overflow-x: hidden;
+}
+:root {
+  /* Futuristic Color Palette */
+  --bg-deep: #050508;
+  --bg-surface: #0a0a0f;
+  --accent-primary: #6366f1; /* Indigo Glow */
+  --accent-secondary: #a855f7; /* Purple Neon */
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-bg: rgba(10, 10, 15, 0.7);
+}
+
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  color-scheme: dark;
+}
+
+body {
+  overflow-x: hidden;
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bg-deep);
+  color: var(--text-main);
+  line-height: 1.6;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  
+  /* Smooth Page Entrance */
+  animation: pageReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Futuristic Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-deep);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(99, 102, 241, 0.2);
+  border-radius: 10px;
+  border: 2px solid var(--bg-deep);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-primary);
+}
+
+/* Typography Upgrades */
+h1, h2, h3 {
+  letter-spacing: -0.02em;
+}
+
+code {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+  transition: cubic-bezier(0.4, 0, 0.2, 1) 0.3s;
+}
+
+/* Optimized Animations */
+@keyframes pageReveal {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+    filter: blur(12px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Utility Class for futuristic text glow */
+.text-glow {
+  text-shadow: 0 0 15px rgba(99, 102, 241, 0.5);
+}
+
+/* Utility Class for the Reveal effect you used */
+.reveal {
+  animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Selection color (matches the theme) */
+::selection {
+  background: rgba(99, 102, 241, 0.3);
+  color: #fff;
+}

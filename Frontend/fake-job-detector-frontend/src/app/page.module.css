@@ -1,0 +1,291 @@
+.container {
+  min-height: 100vh;
+  background-color: #050508;
+  position: relative;
+  color: #ffffff;
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+}
+
+/* Background & Effects */
+.gridOverlay {
+  position: fixed;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(100, 100, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(100, 100, 255, 0.05) 1px, transparent 1px);
+  background-size: 50px 50px;
+  mask-image: radial-gradient(circle at center, black, transparent 85%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.glowOrb {
+  position: fixed;
+  top: 25%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 650px;
+  height: 650px;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.12) 0%, transparent 70%);
+  filter: blur(90px);
+  z-index: 0;
+}
+
+.floatingNode {
+  position: absolute;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.07) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 1;
+  animation: float 12s infinite ease-in-out;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) translateX(0); }
+  50% { transform: translateY(-50px) translateX(20px); }
+}
+
+/* Sections */
+.heroSection {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 100px 1rem 40px 1rem;
+  position: relative;
+  z-index: 10;
+}
+
+.heroContent {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  max-width: 800px;
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.6rem 1.2rem;
+  background: rgba(99, 102, 241, 0.08);
+  border: 1px solid rgba(99, 102, 241, 0.25);
+  border-radius: 100px;
+  font-size: 0.7rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #a5b4fc;
+  margin-bottom: 1.5rem;
+}
+
+.glitchTitle {
+  font-size: clamp(3.5rem, 9vw, 5.5rem);
+  font-weight: 800;
+  letter-spacing: -3px;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(to bottom, #ffffff 40%, #64748b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.heroSubtext {
+  font-size: 1.2rem;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-bottom: 3rem;
+  max-width: 600px;
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+}
+
+.primaryBtn {
+  position: relative;
+  padding: 1.1rem 2.8rem;
+  background: #6366f1;
+  color: white;
+  border-radius: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 30px -10px rgba(99, 102, 241, 0.5);
+}
+
+.secondaryBtn {
+  padding: 1.1rem 2.8rem;
+  background: rgba(255, 255, 255, 0.02);
+  color: white;
+  border-radius: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+/* Aesthetic Lock Icon Fix */
+.lockIcon {
+  background: linear-gradient(to bottom, #ffffff, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 8px rgba(99, 102, 241, 0.6));
+  display: inline-block;
+}
+
+/* Scroll UI */
+.scrollIndicatorContainer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding-top: 2rem;
+}
+
+.scrollIndicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  color: #64748b;
+  font-size: 0.7rem;
+  letter-spacing: 2px;
+}
+
+.mouseWheel {
+  width: 22px;
+  height: 38px;
+  border: 2px solid rgba(100, 116, 139, 0.5);
+  border-radius: 20px;
+  position: relative;
+}
+
+.mouseWheel::before {
+  content: '';
+  position: absolute;
+  top: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 8px;
+  background: #6366f1;
+  border-radius: 2px;
+  animation: scrollAnim 2s infinite;
+}
+
+@keyframes scrollAnim {
+  0% { transform: translate(-50%, 0); opacity: 1; }
+  100% { transform: translate(-50%, 15px); opacity: 0; }
+}
+
+/* Glassmorphism Sections */
+.sectionWrapper {
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 120px 2rem;
+  z-index: 10;
+  position: relative;
+}
+
+.sectionTitle {
+  font-size: 2.75rem;
+  font-weight: 700;
+  margin-bottom: 4rem;
+  background: linear-gradient(to right, #ffffff, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.howItWorks {
+  display: flex;
+  gap: 2.5rem;
+  max-width: 1100px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.stepCard {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(25px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 3rem 2.5rem;
+  border-radius: 28px;
+  width: 320px;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.stepCard:hover {
+  transform: translateY(-15px) scale(1.02);
+  border-color: rgba(99, 102, 241, 0.4);
+}
+
+.stepNumber {
+  color: #818cf8;
+  font-weight: 800;
+  font-size: 0.9rem;
+  margin-bottom: 1.5rem;
+}
+
+.featureGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2.5rem;
+  max-width: 1000px;
+  width: 100%;
+}
+
+.featureItem {
+  padding: 2.5rem;
+  border-left: 2px solid #6366f1;
+  background: linear-gradient(90deg, rgba(99, 102, 241, 0.04), transparent);
+}
+
+.featureIcon {
+  font-size: 1.8rem;
+  margin-bottom: 1.2rem;
+  display: block;
+}
+
+/* Footer */
+.footerLine {
+  padding: 100px 0;
+  display: flex;
+  justify-content: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  z-index: 10;
+  position: relative;
+}
+
+.footerContent {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  font-size: 0.75rem;
+  color: #475569;
+}
+
+.pulseDot {
+  width: 7px;
+  height: 7px;
+  background: #22c55e;
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+@media (max-width: 768px) {
+  .howItWorks { flex-direction: column; align-items: center; }
+  .sectionWrapper { padding: 80px 1.5rem; }
+  .heroSection { padding-top: 60px; }
+  .glitchTitle { font-size: 3rem; }
+}
