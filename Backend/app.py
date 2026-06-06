@@ -6,6 +6,7 @@ import scipy.sparse as sp
 from typing import Optional, Dict, Any
 import datetime
 from contextlib import asynccontextmanager
+from dotenv import load_dotenv
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -14,6 +15,9 @@ from pydantic import BaseModel, Field
 
 import tensorflow as tf
 from tensorflow.keras.preprocessing.sequence import pad_sequences
+
+# Load environment variables from .env
+load_dotenv()
 
 # ----------------------------
 # Paths
@@ -32,14 +36,15 @@ TOKENIZER_PATH = os.path.join(DL_DIR, "tokenizer_v2_lime.pkl")
 # ----------------------------
 # Database Connection
 # ----------------------------
+predictions_collection = None
 try:
-    client = MongoClient("mongodb://localhost:27017/")
+    MONGO_URI = os.getenv("MONGO_URI")
+    client = MongoClient(MONGO_URI)
     db = client["fake_job_detection_db"]
     predictions_collection = db["predictions"]
-    print("✅ Connected to MongoDB")
+    print("✅ Connected to MongoDB Atlas")
 except Exception as e:
     print(f"❌ MongoDB Connection Failed: {e}")
-    predictions_collection = None
 
 # ----------------------------
 # Global Variables
@@ -91,7 +96,7 @@ class PredictRequest(BaseModel):
     requirements: Optional[str] = Field(default="")
     country: Optional[str] = Field(default=None)
     location: Optional[str] = Field(default=None)
-    threshold: float  # Strictly required field (No default fallback value)
+    threshold: float
 
 class PredictResponse(BaseModel):
     final_label: str
@@ -131,15 +136,13 @@ def predict(req: PredictRequest):
         if parts:
             country = parts[0].upper() if len(parts[0]) <= 3 else parts[-1].upper()
 
-    # 1. Run Models
     dl_prob = predict_dl(req.description)
     ml_prob = predict_ml(req.title, req.description, req.requirements, country)
 
-    # 2. Ensemble Calculation
     w_ml, w_dl = 0.8, 0.2
     combined_prob = (ml_prob * w_ml) + (dl_prob * w_dl)
 
-    # 3. HEURISTIC OVERRIDE (The "Mysterious Job" Fix)
+    # 3. HEURISTIC OVERRIDE
     penalty = 0.0
     full_text = f"{req.description} {req.requirements}".lower()
     
@@ -147,9 +150,9 @@ def predict(req: PredictRequest):
     is_vague = any(word in full_text for word in ["urgent", "immediately", "asap"]) and len(req.description) < 300
     
     if missing_contact:
-        penalty += 0.15  # Boost fake probability by 15%
+        penalty += 0.15
     if is_vague:
-        penalty += 0.10  # Boost fake probability by 10%
+        penalty += 0.10
         
     combined_prob = min(1.0, combined_prob + penalty)
 
@@ -171,7 +174,6 @@ def predict(req: PredictRequest):
         }
     )
 
-    # 5. Save to MongoDB
     if predictions_collection is not None:
         try:
             predictions_collection.insert_one({
