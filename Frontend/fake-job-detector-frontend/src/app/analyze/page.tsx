@@ -33,7 +33,7 @@ export default function AnalyzePage() {
 
     try {
       // Passes the strict threshold variable inside the payload structure
-      const data = await analyzeJob({ 
+      const data: any = await analyzeJob({ 
         title: jobTitle, 
         description: jobText, 
         location: location,
